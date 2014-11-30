@@ -71,13 +71,23 @@ class User extends DomainObject {
 
     public function selectUser( $username, $password ) {
         $userMapper = new Mapper\UserMapper();
-        $select = $userMapper->selectStmt();
-        $select->bindParam( 1, $username, \PDO::PARAM_STR );
-        $select->bindParam( 2, Hash::make( $password ), \PDO::PARAM_STR );
+        // $select = $userMapper->selectStmt();
+        // $select->bindParam( 1, $username, \PDO::PARAM_STR );
+        // $select->bindParam( 2, Hash::make( $password ), \PDO::PARAM_STR );
 
-        if ( $select->execute() ) {
-            if ( $select->rowCount() === 1 ) {
-                $this->result = $select->fetch( \PDO::FETCH_OBJ );
+        // if ( $select->execute() ) {
+        //     if ( $select->rowCount() === 1 ) {
+        //         $this->result = $select->fetch( \PDO::FETCH_OBJ );
+        //         return true;
+        //     }
+        // }
+
+        $password = Hash::make( $password );
+        $sql = "SELECT * FROM users WHERE username = '{$username}' AND password = '{$password}'";
+
+        if ( $rs = $userMapper->rawSelect( $sql ) ) {
+            if ( $rs->rowCount() === 1 ) {
+                $this->result = $rs->fetch( \PDO::FETCH_OBJ );
                 return true;
             }
         }

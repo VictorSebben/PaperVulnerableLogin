@@ -31,6 +31,10 @@ class UserMapper extends Mapper {
     function selectStmt() {
         return $this->selectStmt;
     }
+    
+    function rawSelect( $sql ) {
+        return self::$_pdo->query( $sql );
+    }
 
     protected function doInsert( Domain\DomainObject $object ) {
         $values = array( $object->getUsername(), $object->getPassword() );
